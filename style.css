@@ -1,0 +1,42 @@
+/* style.css — FIRE burn. Tokens on :root, dark variant via prefers-color-scheme. No external fonts.
+   JOURNAL 2026-11-25 created for fire-burn. */
+:root {
+  --bg: #f7f5f2; --card: #ffffff; --text: #1d1b19; --muted: #6b655e; --line: #e4ded6;
+  --accent: #c2410c; --danger: #b91c1c; --ok: #15803d; --warn: #a16207; --mono-bg: #f1ede8;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #121110; --card: #1c1a18; --text: #ece8e3; --muted: #a39b92; --line: #2e2a27;
+    --accent: #fb923c; --danger: #f87171; --ok: #4ade80; --warn: #facc15; --mono-bg: #252220; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { margin: 0 0 8px; font-size: 1.8rem; color: var(--accent); }
+h2 { font-size: 1.05rem; margin: 0 0 12px; }
+section { background: var(--card); border-radius: 12px; padding: 16px; margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.lede { margin: 0 0 8px; }
+.muted { color: var(--muted); font-size: .92rem; }
+.mono, code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .88rem; overflow-wrap: anywhere; }
+pre { background: var(--mono-bg); padding: 12px; border-radius: 8px; white-space: pre-wrap; max-height: 420px; overflow: auto; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; margin: 8px 0; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; }
+input { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--text); min-width: 0; }
+button { font: inherit; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--text); cursor: pointer; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 8px 0 0; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }
+.status { font-size: .92rem; }
+.status.bad, .error { color: var(--danger); }
+.status.ok { color: var(--ok); }
+.summary { font-weight: 700; font-size: 1.05rem; }
+.gates { list-style: none; padding: 0; margin: 8px 0; }
+.gates li { padding: 2px 0; font-size: .92rem; }
+.gates li.ok::before { content: "✓ "; color: var(--ok); }
+.gates li.bad::before { content: "✗ "; color: var(--danger); }
+.confirm { margin: 12px 0; }
+.error { font-weight: 700; white-space: pre-wrap; }
+footer { margin-top: 24px; }
+@media (max-width: 520px) { .kv { grid-template-columns: 1fr; } }

@@ -1,0 +1,92 @@
+<!doctype html>
+<!--
+  index.html — FIRE burn (static page). Burns FIRE (2:77623) through its Burn opcode 88 from the user's own browser
+  wallet. Spec, threats and gates: lib/burn.js and lib/guards.js headers. No third-party script, no analytics,
+  no storage. CSP: scripts and styles from this origin only; network only to the RPC origin (lib/config.js).
+  `frame-ancestors` is ignored in a meta CSP, so app.js refuses to run inside a frame (clickjacking).
+  The integrity attributes are written by scripts/sri.js; test/static.test.js fails if they are stale.
+  JOURNAL 2026-11-25 created for fire-burn.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://mainnet.subfrost.io; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<title>FIRE burn</title>
+<link rel="stylesheet" href="style.css" integrity="sha384-ew0Kwi8dKJQBUayFm0kpcD0FSMp7fSfUlyxG4v6wXbJur82eb5EUpBZbaee9Yyae">
+<script type="module" src="app.js" integrity="sha384-gKfDADBjuc3bhFYIGFyDTxtXJociL6huL1ruhRuP3e72SFqJNjggPxzRB1KQSYWd"></script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>FIRE burn</h1>
+    <p class="lede">Permanently destroy FIRE from your own wallet. Calls FIRE (<code>2:77623</code>) opcode 88
+      <em>Burn</em>: the FIRE you send is removed from the total supply. Everything else on the coins you spend comes back to your
+      own address. <strong>A burn cannot be undone.</strong></p>
+    <p id="rpc-status" class="status" role="status">Checking the RPC…</p>
+  </header>
+
+  <section id="s-wallet">
+    <h2>1 · Connect</h2>
+    <div id="wallet-buttons" class="row"></div>
+    <p id="wallet-none" class="muted" hidden>No supported wallet found (SUBFROST Wallet, UniSat, OYL, Xverse, Leather).</p>
+    <dl id="wallet-info" class="kv" hidden>
+      <dt>Wallet</dt><dd id="w-name"></dd>
+      <dt>FIRE address</dt><dd id="w-alk" class="mono"></dd>
+      <dt>Fee address</dt><dd id="w-pay" class="mono"></dd>
+    </dl>
+  </section>
+
+  <section id="s-token" hidden>
+    <h2>2 · FIRE on chain</h2>
+    <dl class="kv">
+      <dt>Token</dt><dd id="t-id" class="mono"></dd>
+      <dt>Read at block</dt><dd id="t-height" class="mono"></dd>
+      <dt>Total supply</dt><dd id="t-supply" class="mono"></dd>
+      <dt>Decimals</dt><dd id="t-dec" class="mono"></dd>
+      <dt>Implementation</dt><dd id="t-impl" class="mono"></dd>
+    </dl>
+  </section>
+
+  <section id="s-coins" hidden>
+    <h2>3 · Your FIRE</h2>
+    <p id="scan-status" class="muted"></p>
+    <div class="row"><button id="scan-stop" type="button" hidden>Stop scanning</button></div>
+    <p>Balance found: <strong id="fire-balance" class="mono">0</strong> FIRE <span id="fire-coins" class="muted"></span></p>
+  </section>
+
+  <section id="s-amount" hidden>
+    <h2>4 · Amount</h2>
+    <div class="row">
+      <label>FIRE to burn <input id="amount" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="0.0"></label>
+      <button id="amount-max" type="button">Max</button>
+      <label>Fee rate (sat/vB) <input id="feerate" inputmode="decimal" autocomplete="off" value="3"></label>
+    </div>
+    <p class="muted">Base units: <span id="amount-base" class="mono">—</span></p>
+    <button id="check" type="button" class="primary">Build and check</button>
+  </section>
+
+  <section id="s-review" hidden>
+    <h2>5 · Review</h2>
+    <p id="summary" class="summary"></p>
+    <ul id="gates" class="gates"></ul>
+    <details><summary>Decoded transaction</summary><pre id="decoded" class="mono"></pre></details>
+    <label class="confirm">Type <strong id="confirm-want" class="mono"></strong> to confirm
+      <input id="confirm" autocomplete="off" spellcheck="false"></label>
+    <button id="sign" type="button" class="danger" disabled>Sign in wallet</button>
+  </section>
+
+  <section id="s-send" hidden>
+    <h2>6 · Broadcast</h2>
+    <p id="send-status"></p>
+    <button id="broadcast" type="button" class="danger" hidden>Broadcast burn</button>
+    <p id="txid" class="mono"></p>
+  </section>
+
+  <p id="error" class="error" role="alert" hidden></p>
+  <footer class="muted">Read-only checks run against live mainnet state before your wallet is asked anything.
+    Source: this repository. No data leaves your browser except RPC reads and the signed transaction.</footer>
+</main>
+</body>
+</html>
